@@ -96,8 +96,7 @@
 
 
 const jwt = require("jsonwebtoken");
-const Student = require("../models/Student");
-const Trainer = require("../models/Trainers");
+const Customer = require("../models/Customer");
 const Admin = require("../models/Admins");
 
 /**
@@ -111,22 +110,21 @@ const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Find user (admin / trainer / student)
+    // Find user (admin / customer)
     const user =
       (await Admin.findOne({ email })) ||
-      (await Trainer.findOne({ email })) ||
-      (await Student.findOne({ email }));
+      (await Customer.findOne({ email }));
 
     if (!user) {
       return res.status(401).json({ message: "User not found" });
     }
 
-    // Plain-text password check (same as your current setup)
+    // Password check
     if (user.password !== password) {
       return res.status(401).json({ message: "Invalid password" });
     }
 
-    // Access Token (short-lived)
+    // Access Token
     const accessToken = jwt.sign(
       {
         id: user._id,
@@ -134,29 +132,28 @@ const login = async (req, res) => {
         name: user.name,
         email: user.email,
       },
-      process.env.JWT_SECRET, // Akhilesh@123
+      process.env.JWT_SECRET,
       { expiresIn: "1m" }
     );
 
-    // Refresh Token (long-lived)
+    // Refresh Token
     const refreshToken = jwt.sign(
       { id: user._id },
-      process.env.JWT_REFRESH_SECRET, // Sonu@10
+      process.env.JWT_REFRESH_SECRET,
       { expiresIn: "10d" }
     );
 
-    // Save refresh token in DB
+    // Save refresh token
     user.refreshToken = refreshToken;
     await user.save();
 
-    // Save refresh token in cookie
+    // Store cookie
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       sameSite: "lax",
       secure: process.env.NODE_ENV === "production",
     });
 
-    // Send response
     res.json({
       accessToken,
       role: user.role,
@@ -170,9 +167,6 @@ const login = async (req, res) => {
 
 /**
  * REFRESH ACCESS TOKEN
- * - Reads refresh token from cookie
- * - Verifies it
- * - Issues a new access token
  */
 const refresh = async (req, res) => {
   try {
@@ -184,17 +178,14 @@ const refresh = async (req, res) => {
     // Find user with refresh token
     const user =
       (await Admin.findOne({ refreshToken: token })) ||
-      (await Trainer.findOne({ refreshToken: token })) ||
-      (await Student.findOne({ refreshToken: token }));
+      (await Customer.findOne({ refreshToken: token }));
 
     if (!user) {
       return res.sendStatus(403);
     }
 
-    // Verify refresh token
     jwt.verify(token, process.env.JWT_REFRESH_SECRET);
 
-    // Generate new access token
     const newAccessToken = jwt.sign(
       {
         id: user._id,

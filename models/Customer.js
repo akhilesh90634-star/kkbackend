@@ -11,7 +11,7 @@
 
 const mongoose = require("mongoose");
 
-const studentSchema = new mongoose.Schema(
+const customerSchema = new mongoose.Schema(
   {
     name: {
       type: String,
@@ -28,16 +28,16 @@ const studentSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      default: "student", // ✅ AUTO role
+      default: "customer", // ✅ AUTO role
     },
     refreshToken: {
-    type: String,
-    default: null,
-  },
+      type: String,
+      default: null,
+    },
   },
   {
     timestamps: true,
   }
 );
 
-module.exports = mongoose.model("students", studentSchema);
+module.exports = mongoose.model("customers", customerSchema);

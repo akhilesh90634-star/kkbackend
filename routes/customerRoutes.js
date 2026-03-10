@@ -60,18 +60,18 @@ const express = require("express");
 const router = express.Router();
 
 const {
-  getStudents,
-  registerStudent,
-  deleteStudent,
-  updateStudent,
-} = require("../controllers/studentControllers");
+  getCustomers,
+  registerCustomer,
+  deleteCustomer,
+  updateCustomer,
+} = require("../controllers/customerControllers");
 
-// PUBLIC: student registration
-router.post("/register", registerStudent);
+// PUBLIC: customer registration
+router.post("/register", registerCustomer);
 
 // ADMIN / PROTECTED (recommended)
-router.get("/", getStudents);
-router.delete("/:id", deleteStudent);
-router.put("/:id", updateStudent);
+router.get("/", getCustomers);
+router.delete("/:id", deleteCustomer);
+router.put("/:id", updateCustomer);
 
 module.exports = router;

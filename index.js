@@ -35,8 +35,7 @@ app.use(cookieParser());
 connectdb();
 
 // 🔹 Routes
-app.use("/students", require("./routes/studentRoutes"));
-app.use("/trainers", require("./routes/trainerRoutes"));
+app.use("/customers", require("./routes/customerRoutes"));
 app.use("/auth", require("./routes/authRoutes"));
 
 // 🔹 Server

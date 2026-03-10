@@ -95,68 +95,68 @@
 // };
 
 
-const studentModel = require("../models/Student");
+const customerModel = require("../models/Customer");
 
-// ================= GET ALL STUDENTS =================
-const getStudents = async (req, res) => {
+// ================= GET ALL CUSTOMERS =================
+const getCustomers = async (req, res) => {
   try {
-    const students = await studentModel.find({}, "name email");
-    res.status(200).json(students);
+    const customers = await customerModel.find({}, "name email");
+    res.status(200).json(customers);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-// ================= REGISTER STUDENT =================
-const registerStudent = async (req, res) => {
+// ================= REGISTER CUSTOMER =================
+const registerCustomer = async (req, res) => {
   try {
     const data = req.body;
-    data.role = "student";
+    data.role = "customer";
 
-    await studentModel.create(data);
-    res.status(201).json({ message: "Student details stored!!!" });
+    await customerModel.create(data);
+    res.status(201).json({ message: "Customer details stored!!!" });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };
 
-// ================= DELETE STUDENT (BY ID) =================
-const deleteStudent = async (req, res) => {
+// ================= DELETE CUSTOMER (BY ID) =================
+const deleteCustomer = async (req, res) => {
   try {
-    const deleted = await studentModel.findByIdAndDelete(req.params.id);
+    const deleted = await customerModel.findByIdAndDelete(req.params.id);
 
     if (!deleted) {
-      return res.status(404).json({ message: "Student not found" });
+      return res.status(404).json({ message: "Customer not found" });
     }
 
-    res.status(200).json({ message: "Student deleted" });
+    res.status(200).json({ message: "Customer deleted" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-// ================= UPDATE STUDENT (BY ID) =================
-const updateStudent = async (req, res) => {
+// ================= UPDATE CUSTOMER (BY ID) =================
+const updateCustomer = async (req, res) => {
   try {
-    const updated = await studentModel.findByIdAndUpdate(
+    const updated = await customerModel.findByIdAndUpdate(
       req.params.id,
       req.body,
       { new: true }
     );
 
     if (!updated) {
-      return res.status(404).json({ message: "Student not found" });
+      return res.status(404).json({ message: "Customer not found" });
     }
 
-    res.status(200).json({ message: "Student updated", updated });
+    res.status(200).json({ message: "Customer updated", updated });
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 };
 
 module.exports = {
-  getStudents,
-  registerStudent,
-  deleteStudent,
-  updateStudent,
+  getCustomers,
+  registerCustomer,
+  deleteCustomer,
+  updateCustomer,
 };
