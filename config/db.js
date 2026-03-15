@@ -16,11 +16,9 @@ const connectDB = () => {
     .then(() => {
       console.log("✅ Database connected");
     })
-    .catch((err) => {
-      console.error("❌ Database connection failed");
-      console.error(err.message);
-      process.exit(1);
-    });
-};
-
+.catch((err) => {
+  console.log("Database connection failed");
+  console.log(err.message);
+});
+}
 module.exports = connectDB;
