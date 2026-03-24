@@ -8,7 +8,7 @@ const {
   updateCustomer,
 } = require("../controllers/customerControllers");
 
-const { verifyToken, isAdmin } = require("../middleware/authMiddleware");
+const { verifyToken, isAdmin } = require("../middlewares/authMiddleware");
 
 // PUBLIC
 router.post("/register", registerCustomer);
